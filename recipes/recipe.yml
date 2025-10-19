@@ -2,12 +2,9 @@
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 # image will be published to ghcr.io/<user>/<name>
 name: bluebuild-diy
-# description will be included in the image's metadata
-description: This is my personal OS image.
-
-# the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 42 # latest is also supported if you want new updates ASAP
+description: Aurora DX with open Nvidia drivers
+base-image: ghcr.io/ublue-os/aurora-dx-nvidia-open
+image-version: latest #42 # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -23,8 +20,24 @@ modules:
         - atim/starship
     install:
       packages:
-        - micro
+        - btop
+        - curl
+        - fd
+        - git
+        - gh
+        - htop
+        - neovim
+        - nmap
+        - openssh
+        - ripgrep
+        - solaar
         - starship
+        - tmux
+        - tldr
+        - unzip
+        - wget
+        - zsh
+
     remove:
       packages:
         # example: removing firefox (in favor of the flatpak)
@@ -39,7 +52,26 @@ modules:
         # If no repo information is specified, Flathub will be used by default
         install: # system flatpaks we want all users to have and not remove
           - org.mozilla.firefox
+          - app.zen_browser.zen
+          - com.bitwarden.desktop
+          - com.calibre_ebook.calibre
+          - com.discordapp.Discord
+          #- com.freecad.FreeCAD
+          - com.github.PintaProject.Pinta
+          #- com.inkscape.Inkscape
+          - com.moonlight_stream.Moonlight
+          #- com.openscad.OpenSCAD
+          - com.rtosta.zapzap
+          - com.stremio.Stremio
+          - com.valvesoftware.Steam
+          - com.visualstudio.code
+          - org.gimp.GIMP
           - org.gnome.Loupe
+          - org.kde.okular
+          - org.libreoffice.LibreOffice
+          - org.qbittorrent.qBittorrent
+          - org.videolan.VLC
+          - org.virt_manager.virt-manager
       - scope: user # Also add Flathub user repo, but no user packages
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
