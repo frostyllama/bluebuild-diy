@@ -23,14 +23,14 @@ modules:
     repos:
       copr:
         - atim/starship
+        # CachyOS Kernel Has Asus optimizations and some bonus features
+        - bieszczaders/kernel-cachyos
         
         - name: lukenukem/asus-linux
           description: Copr repo for asus-linux owned by lukenukem
           baseurl: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/fedora-$releasever-$basearch/
           gpgkey: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/pubkey.gpg
 
-        # Has Asus kernel optimizations and some bonus features
-        - bieszczaders/kernel-cachyos
 
     install:
       packages:
