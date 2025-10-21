@@ -1,4 +1,4 @@
---
+---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 # image will be published to ghcr.io/<user>/<name>
 name: bluebuild-diy
@@ -29,6 +29,9 @@ modules:
           baseurl: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/fedora-$releasever-$basearch/
           gpgkey: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/pubkey.gpg
 
+        # Has Asus kernel optimizations and some bonus features
+        - bieszczaders/kernel-cachyos
+
     install:
       packages:
         - btop
@@ -55,6 +58,12 @@ modules:
         - xorg-x11-drv-nvidia-cuda  # Required for CUDA
         - asusctl                 # ASUS control utility
         - supergfxctl             # Graphics switching daemon
+        # Asus Optimized CachyOS Kernal + patches
+        - kernel-cachyos
+        - kernel-cachyos-core
+        - kernel-cachyos-devel
+        - kernel-cachyos-modules
+        - kernel-cachyos-modules-extra
 
     remove:
       packages:
@@ -62,6 +71,13 @@ modules:
         # "firefox" is the main package, "firefox-langpacks" is a dependency
         - firefox
         - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+
+        # Remove for CachyOS kernel to be applied
+        - kernel
+        - kernel-core
+        - kernel-devel
+        - kernel-modules
+        - kernel-modules-extra
 
   - type: default-flatpaks
     configurations:
