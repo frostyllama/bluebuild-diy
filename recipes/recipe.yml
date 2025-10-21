@@ -14,18 +14,19 @@ modules:
       - source: system
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
 
+  - type: repo
+    repos:
+      - name: lukenukem/asus-linux
+        description: Copr repo for asus-linux owned by lukenukem
+        baseurl: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/fedora-$releasever-$basearch/
+        gpgkey: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/pubkey.gpg
+
   - type: dnf
     repos:
       copr:
-        - name: atim/starship
+        - atim/starship
         # CachyOS Kernel Has Asus optimizations and some bonus features
-        - name: bieszczaders/kernel-cachyos
-        
-        - name: lukenukem/asus-linux
-          description: Copr repo for asus-linux owned by lukenukem
-          baseurl: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/fedora-$releasever-$basearch/
-          gpgkey: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/pubkey.gpg
-
+        - bieszczaders/kernel-cachyos
 
     install:
       packages:
@@ -114,9 +115,10 @@ modules:
 
   - type: kargs
     #delete: 
-    add:
-      - rd.driver.blacklist=nouveau
-      - modprobe.blacklist=nouveau
-      - nvidia-drm.modeset=1
+    kargs:
+      add:
+        - rd.driver.blacklist=nouveau
+        - modprobe.blacklist=nouveau
+        - nvidia-drm.modeset=1
 
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
