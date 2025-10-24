@@ -1,10 +1,10 @@
 ---
 # yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 # image will be published to ghcr.io/<user>/<name>
-name: bluebuild-diy
-description: Aurora DX with open Nvidia drivers and Asus specific updates
-base-image: ghcr.io/ublue-os/aurora-dx-nvidia-open
-image-version: latest #42 # latest is also supported if you want new updates ASAP
+name: bazzite-dx-diy
+description: Custom bazzite-dx roll w/ config saves
+base-image: ostree-image-signed:docker://ghcr.io/ublue-os/bazzite-dx-nvidia
+image-version: latest
 
 # module configuration, executed in order
 # you can include multiple instances of the same module
@@ -13,6 +13,8 @@ modules:
     files:
       - source: system
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+      - usr: /usr  
+      - etc: /etc
 
   - type: repo
     repos:
@@ -25,8 +27,6 @@ modules:
     repos:
       copr:
         - atim/starship
-        # CachyOS Kernel Has Asus optimizations and some bonus features
-        - bieszczaders/kernel-cachyos
 
     install:
       packages:
@@ -49,17 +49,8 @@ modules:
         - zsh
 
         # Asus specific entries:
-        - akmod-nvidia            # Core driver package
-        - xorg-x11-drv-nvidia-power # Required for power management
-        - xorg-x11-drv-nvidia-cuda  # Required for CUDA
         - asusctl                 # ASUS control utility
         - supergfxctl             # Graphics switching daemon
-        # Asus Optimized CachyOS Kernal + patches
-        - kernel-cachyos
-        - kernel-cachyos-core
-        - kernel-cachyos-devel
-        - kernel-cachyos-modules
-        - kernel-cachyos-modules-extra
 
     remove:
       packages:
@@ -68,57 +59,28 @@ modules:
         - firefox
         - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 
-        # Remove for CachyOS kernel to be applied
-        - kernel
-        - kernel-core
-        - kernel-devel
-        - kernel-modules
-        - kernel-modules-extra
 
-  - type: default-flatpaks
-    configurations:
-      - notify: true # Send notification after install/uninstall is finished (true/false)
-        scope: system
-        # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
-          - app.zen_browser.zen
-          - com.bitwarden.desktop
-          - com.calibre_ebook.calibre
-          - com.discordapp.Discord
-          #- com.freecad.FreeCAD
-          - com.github.PintaProject.Pinta
-          #- com.inkscape.Inkscape
-          - com.moonlight_stream.Moonlight
-          #- com.openscad.OpenSCAD
-          - com.rtosta.zapzap
-          - com.stremio.Stremio
-          - com.valvesoftware.Steam
-          - com.visualstudio.code
-          - org.gimp.GIMP
-          - org.gnome.Loupe
-          - org.kde.okular
-          - org.libreoffice.LibreOffice
-          - org.qbittorrent.qBittorrent
-          - org.videolan.VLC
-          - org.virt_manager.virt-manager 
-      - scope: user # Also add Flathub user repo, but no user packages
-
-  - type: akmods
-    base: asus # if not specified, classic "main" base is used by default
-    install:
-      - kvmfr
-      - v4l2loopback
-      - zenergy
-      - ryzen-smu
-    #nvidia-driver: nvidia-open
-
-  - type: kargs
-    #delete: 
-    kargs:
-      add:
-        - rd.driver.blacklist=nouveau
-        - modprobe.blacklist=nouveau
-        - nvidia-drm.modeset=1
-
+  - type: flatpaks
+    install:          
+    - app.zen_browser.zen
+    - com.bitwarden.desktop
+    - com.calibre_ebook.calibre
+    - com.discordapp.Discord
+    - com.github.PintaProject.Pinta
+    - com.moonlight_stream.Moonlight
+    - com.protonvpn.www
+    - com.rtosta.zapzap
+    - com.stremio.Stremio
+    - com.vscodium.codium
+    - io.appflowy.AppFlowy
+    - io.github.pwr_solaar.solaar
+    - io.github.softfever.OrcaSlicer
+    - org.chromium.Chromium
+    - org.gimp.GIMP
+    - org.libreoffice.LibreOffice
+    - org.qbittorrent.qBittorrent
+    - org.videolan.VLC
+    - org.virt_manager.virt-manager
+    - org.wezfurlong.wezterm
+  - scope: user # Also add Flathub user repo, but no user packages
   - type: signing # this sets up the proper policy & signing files for signed images to work fully
