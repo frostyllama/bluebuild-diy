@@ -13,20 +13,12 @@ modules:
     files:
       - source: system
         destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
-      - usr: /usr  
-      - etc: /etc
-
-  - type: repo
-    repos:
-      - name: lukenukem/asus-linux
-        description: Copr repo for asus-linux owned by lukenukem
-        baseurl: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/fedora-$releasever-$basearch/
-        gpgkey: https://download.copr.fedorainfracloud.org/results/lukenukem/asus-linux/pubkey.gpg
 
   - type: dnf
     repos:
       copr:
         - atim/starship
+        - lukenukem/asus-linux
 
     install:
       packages:
@@ -54,33 +46,36 @@ modules:
 
     remove:
       packages:
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
         - firefox
         - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
 
 
-  - type: flatpaks
-    install:          
-    - app.zen_browser.zen
-    - com.bitwarden.desktop
-    - com.calibre_ebook.calibre
-    - com.discordapp.Discord
-    - com.github.PintaProject.Pinta
-    - com.moonlight_stream.Moonlight
-    - com.protonvpn.www
-    - com.rtosta.zapzap
-    - com.stremio.Stremio
-    - com.vscodium.codium
-    - io.appflowy.AppFlowy
-    - io.github.pwr_solaar.solaar
-    - io.github.softfever.OrcaSlicer
-    - org.chromium.Chromium
-    - org.gimp.GIMP
-    - org.libreoffice.LibreOffice
-    - org.qbittorrent.qBittorrent
-    - org.videolan.VLC
-    - org.virt_manager.virt-manager
-    - org.wezfurlong.wezterm
-  - scope: user # Also add Flathub user repo, but no user packages
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+  - type: default-flatpaks
+    configurations:
+      - scope: user
+        notify: true
+        repo:
+          title: Flathub (user)
+        install: # system flatpaks we want all users to have and not remove
+          - app.zen_browser.zen
+          - com.bitwarden.desktop
+          - com.calibre_ebook.calibre
+          - com.discordapp.Discord
+          - com.github.PintaProject.Pinta
+          - com.moonlight_stream.Moonlight
+          - com.protonvpn.www
+          - com.rtosta.zapzap
+          - com.stremio.Stremio
+          - com.vscodium.codium
+          - io.appflowy.AppFlowy
+          - io.github.pwr_solaar.solaar
+          - io.github.softfever.OrcaSlicer
+          - org.chromium.Chromium
+          - org.mozilla.firefox
+          - org.gimp.GIMP
+          - org.libreoffice.LibreOffice
+          - org.qbittorrent.qBittorrent
+          - org.videolan.VLC
+          - org.virt_manager.virt-manager
+          - org.wezfurlong.wezterm
+  - type: signing
