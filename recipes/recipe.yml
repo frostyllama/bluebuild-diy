@@ -69,7 +69,7 @@ modules:
           - com.vscodium.codium
           - io.appflowy.AppFlowy
           - io.github.pwr_solaar.solaar
-          - io.github.softfever.OrcaSlicer
+          #- io.github.softfever.OrcaSlicer
           - org.chromium.Chromium
           - org.mozilla.firefox
           - org.gimp.GIMP
